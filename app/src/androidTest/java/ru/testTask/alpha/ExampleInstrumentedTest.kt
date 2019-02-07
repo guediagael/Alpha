@@ -1,4 +1,4 @@
-package ru.test.alpha
+package ru.testTask.alpha
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

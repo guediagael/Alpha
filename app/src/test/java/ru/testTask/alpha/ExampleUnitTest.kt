@@ -1,4 +1,4 @@
-package ru.test.alpha
+package ru.testTask.alpha
 
 import org.junit.Test
 

@@ -1,7 +1,8 @@
-package ru.test.alpha
+package ru.testTask.alpha.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import ru.testTask.alpha.R
 
 class DetailsActivity : AppCompatActivity() {
 
