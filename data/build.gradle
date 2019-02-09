@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+
+android {
+    compileSdkVersion 28
+
+
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"$rootProject.debugBaseUrl\"")
+
+        }
+        debug {
+            minifyEnabled false
+            buildConfigField("String", "BASE_URL", "\"$rootProject.debugBaseUrl\"")
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+}
+
+dependencies {
+    implementation project(path: ':core', configuration: 'default')
+    implementation project(path: ':logger', configuration: 'default')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation kotlinDeps.values()
+
+
+
+    implementation daggerDeps.values()
+    kapt daggerKapt.values()
+
+    implementation networkDeps.values()
+
+    testImplementation unitTestsDeps.values()
+    testImplementation project(':testShared')
+}

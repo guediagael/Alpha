@@ -1,0 +1,17 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+
+
+dependencies {
+    api project(path: ':model', configuration: 'default')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation rxDeps.values()
+    implementation daggerDeps.inject
+
+    testImplementation unitTestsDeps.values()
+    testImplementation project(path: ':testShared')
+}
+
+

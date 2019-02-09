@@ -1,27 +1,35 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-buildscript {
-    ext.kotlin_version = '1.3.21'
+buildscript { 
+
+    ext.kotlinVersion = '1.3.21'
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-    }
+     }
+
+
+
+
+
 }
 
 allprojects {
     repositories {
         google()
         jcenter()
-        
+
     }
 }
+
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir
@@ -29,9 +37,82 @@ task clean(type: Delete) {
 
 
 ext {
+    //App version
+    versionName = '1.0'
+    versionCode = 1
+
+    //SDK and tools
+    compileSdkVersion = 28
+    minSdkVersion = 19
+    targetSdkVersion = 28
+
+    appCompatVersion = '28.0.0'
+    supportVersion = '28.0.0'
+    constraintLayoutVersion = '1.1.3'
+
+    //test
+    junitVersion = '4.12'
+    espressoCoreVersion = '3.0.2'
+    espressoRunnerVersion = '1.0.2'
+
+
     retrofitVersion = '2.5.0'
+    okhttpVersion = '3.8.0'
+
+    daggerVersion = "2.20"
+    javaxInjectVersion = '1'
+
     debugBaseUrl = "https://alfabank.ru"
-    dagger2Version = "2.15"
+
     rxJavaVersion = "2.x.x"
-    rxAndroidVersion = "2.1.0"
+    rxKotlinVersion = '2.3.0'
+    rxAndroidVersion = '2.1.0'
+
+    androidDeps = [
+            cardView        : "com.android.support:cardview-v7:$supportVersion",
+            recyclerView    : "com.android.support:recyclerview-v7:$supportVersion",
+            constraintLayout: "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
+            supportAppCompat: "com.android.support:appcompat-v7:$appCompatVersion",
+            supportV4       : "com.android.support:support-v4:$supportVersion"
+    ]
+
+
+
+    kotlinDeps = [
+            kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    ]
+
+    rxDeps = [
+            rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
+    ]
+
+    daggerDeps = [
+            dagger2: "com.google.dagger:dagger-android:$daggerVersion",
+            inject : "javax.inject:javax.inject:$javaxInjectVersion"
+    ]
+
+    daggerKapt = [
+            compiler : "com.google.dagger:dagger-compiler:$daggerVersion",
+            processor: "com.google.dagger:dagger-android-processor:$daggerVersion"
+    ]
+
+    unitTestsDeps = [
+            jUnit: "junit:junit:$junitVersion",
+    ]
+
+    espressoDeps = [
+            runner: "com.android.support.test:runner:$espressoRunnerVersion",
+            core  : "com.android.support.test.espresso:espresso-core:$espressoCoreVersion"
+    ]
+
+
+    networkDeps = [
+            retrofit          : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            rxAdapter         : "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+            simpleXmlConverter: "com.squareup.retrofit2:converter-simplexml:$retrofitVersion",
+            okHttp            : "com.squareup.okhttp3:okhttp:$okhttpVersion",
+            logging           : "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    ]
+
+
 }
