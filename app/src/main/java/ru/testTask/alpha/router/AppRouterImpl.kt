@@ -3,7 +3,8 @@ package ru.testTask.alpha.router
 import android.content.Context
 import javax.inject.Inject
 
-class AppRouterImpl  @Inject constructor(): AppRouter {
+class AppRouterImpl
+@Inject constructor(): AppRouter {
     override fun startFetchService(context: Context) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

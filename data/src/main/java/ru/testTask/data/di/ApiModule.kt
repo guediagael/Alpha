@@ -12,5 +12,6 @@ class ApiModule {
 
     @Provides
     @ApplicationScope
-    fun bindFeedApi(): FeedApi = FeedApi.create()
+    fun provideFeedApi(): FeedApi = FeedApi.create()
+
 }

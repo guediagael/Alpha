@@ -1,41 +1,54 @@
 package ru.testTask.data
 
+import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.Single
-import ru.testTask.core.repo.FetchDataRepo
-import ru.testTask.core.repo.LoadDataRepo
+import ru.testTask.core.data.DataManager
+import ru.testTask.core.data.repo.FetchDataRepo
+import ru.testTask.core.data.repo.LoadDataRepo
 import ru.testTask.data.model.Item
 import ru.testTask.data.model.Rss
 import ru.testTask.data.remote.api.FeedApi
 import ru.testTask.model.FeedItem
-import java.util.concurrent.Callable
 import javax.inject.Inject
 
-class AppRepoImpl  (private val feedApi: FeedApi): FetchDataRepo, LoadDataRepo {
-
+class AppRepoImpl @Inject constructor(
+    private val feedApi: FeedApi,
+    private val dataManager: DataManager
+) : FetchDataRepo, LoadDataRepo {
 
     override fun isFirstAppUseUse(): Single<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Single.fromCallable { dataManager.isFirstConnection() }
     }
 
     /**
      * @return data from api
      */
-    override fun fetchFromApi(): Flowable<FeedItem> {
-        return feedApi.getRssFeed().flatMap { rss: Rss-> mapApiResultToAppModel(rss.mChannel?.mItems) }
+    override fun fetchFromApi(): Flowable<List<FeedItem>> {
+        return feedApi
+            .getRssFeed()
+            .flatMap { rss: Rss -> mapApiResultToAppModel(rss.mChannel?.mItems) }
     }
 
     /**
      * @return the cached data from local storage
      */
-    override fun fetchDataFromDb(): Observable<FeedItem> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun fetchDataFromDb(): Flowable<List<FeedItem>> {
+        return dataManager.getFeedItems()
     }
 
 
-    private fun mapApiResultToAppModel(items: List<Item>?): Flowable<FeedItem>{
-        return Flowable.fromIterable(items?.map { item-> FeedItem(item.mTitle!!, item.mLink!!) })
+    //TODO: Отдельный маппер(class)
+    private fun mapApiResultToAppModel(items: List<Item>?): Flowable<List<FeedItem>> {
+        val feedItem = arrayListOf<FeedItem>()
+        items?.map { item -> feedItem.add(FeedItem(item.mTitle!!, item.mLink!!)) }
+        addItemToTheDb(feedItem)
+        return  Flowable.fromCallable{feedItem}
+
     }
+
+    private fun addItemToTheDb(items: List<FeedItem>): Completable {
+       return dataManager.addItemstoTheDb(items)
+    }
+
 }

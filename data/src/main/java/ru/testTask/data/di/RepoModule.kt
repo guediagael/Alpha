@@ -1,25 +1,64 @@
 package ru.testTask.data.di
 
-import dagger.Binds
+import android.arch.persistence.room.Room
+import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
+import ru.testTask.core.data.DataManager
+import ru.testTask.core.data.DbHelper
+import ru.testTask.core.data.SharedPreferencesHelper
+import ru.testTask.core.data.repo.FetchDataRepo
+import ru.testTask.core.data.repo.LoadDataRepo
 import ru.testTask.core.di.ApplicationScope
-import ru.testTask.core.repo.FetchDataRepo
-import ru.testTask.core.repo.LoadDataRepo
+import ru.testTask.data.AppDataManager
 import ru.testTask.data.AppRepoImpl
+import ru.testTask.data.BuildConfig
+import ru.testTask.data.local.db.AppDataBase
+import ru.testTask.data.local.db.AppDbHelper
+import ru.testTask.data.local.prefs.AppSharedPreferenceHelper
 import ru.testTask.data.remote.api.FeedApi
-import javax.inject.Singleton
 
 @Module
 class RepoModule {
 
+    @Provides
+    @ApplicationScope
+    fun provideDatabase(application: Context): AppDataBase {
+        val db = Room.databaseBuilder(application, AppDataBase::class.java, BuildConfig.APPLICATION_ID).build()
+        return db
+    }
+
+
+
+    @ApplicationScope
+    @Provides
+    fun provideSharedPreferenceHelper(context: Context): SharedPreferencesHelper {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
+        return AppSharedPreferenceHelper(sharedPreferences)
+    }
+
+    @ApplicationScope
+    @Provides
+    fun provideDbHelper(appDataBase: AppDataBase): DbHelper = AppDbHelper(appDataBase)
+
+
 
     @Provides
     @ApplicationScope
-    fun provideSplashRepo(feedApi: FeedApi) : FetchDataRepo = AppRepoImpl(feedApi)
+    fun provideDataManager(sharedPreferencesHelper: SharedPreferencesHelper, dbHelper: DbHelper): DataManager{
+        return AppDataManager(sharedPreferencesHelper, dbHelper)
+    }
+
+    @Provides
+    @ApplicationScope
+    fun provideSplashRepo(feedApi: FeedApi, dataManager: DataManager): FetchDataRepo {
+        return AppRepoImpl(feedApi, dataManager)
+    }
 
 
     @Provides
     @ApplicationScope
-    fun provideMainRepo(feedApi: FeedApi) : LoadDataRepo = AppRepoImpl(feedApi)
+    fun provideMainRepo(feedApi: FeedApi, dataManager: DataManager): LoadDataRepo = AppRepoImpl(feedApi, dataManager)
 }

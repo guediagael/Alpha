@@ -24,11 +24,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "\"$rootProject.debugBaseUrl\"")
-
+            buildConfigField("int", "DB_VERSION", "$rootProject.dbVersion")
         }
         debug {
             minifyEnabled false
             buildConfigField("String", "BASE_URL", "\"$rootProject.debugBaseUrl\"")
+            buildConfigField("int", "DB_VERSION", "$rootProject.dbVersion")
+
         }
     }
 
@@ -45,14 +47,17 @@ dependencies {
     implementation project(path: ':core', configuration: 'default')
     implementation project(path: ':logger', configuration: 'default')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation kotlinDeps.values()
-
-
 
     implementation daggerDeps.values()
     kapt daggerKapt.values()
 
     implementation networkDeps.values()
+
+    api roomDeps.values()
+    kapt roomKapt.values()
+
 
     testImplementation unitTestsDeps.values()
     testImplementation project(':testShared')
