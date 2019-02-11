@@ -1,10 +1,11 @@
 package ru.testTask.data.model
 
-//import org.simpleframework.xml.ElementList
-//import org.simpleframework.xml.Root
+import org.simpleframework.xml.ElementList
+import org.simpleframework.xml.Root
 
-//@Root(name = "Channel", strict = false)
+
+@Root(name = "Channel", strict = false)
 class Channel{
-//    @field:ElementList(name = "item", inline = true)
-//    internal var mItems : List<Item>? = null
+    @field:ElementList(name = "item", inline = true)
+    var mItems : List<Item>? = null
 }

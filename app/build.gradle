@@ -49,6 +49,7 @@ dependencies {
     implementation project(':splash')
 
     implementation androidDeps.values()
+    implementation rxDeps.values()
 
     implementation kotlinDeps.values()
 

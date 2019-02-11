@@ -33,6 +33,7 @@ dependencies {
     implementation project(':core')
 
     implementation androidDeps.values()
+    implementation rxDeps.values()
 
     implementation kotlinDeps.values()
 

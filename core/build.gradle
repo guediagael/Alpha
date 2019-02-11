@@ -4,7 +4,7 @@ apply plugin: 'kotlin'
 
 
 dependencies {
-    api project(path: ':model', configuration: 'default')
+    api project(path: ':model')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation rxDeps.values()

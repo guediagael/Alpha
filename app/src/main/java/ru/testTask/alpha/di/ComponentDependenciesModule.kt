@@ -21,4 +21,5 @@ abstract class ComponentDependenciesModule {
     abstract fun provideMainDependencies(component: AppComponent): ComponentDependencies
 
 
+
 }

@@ -73,7 +73,8 @@ ext {
             recyclerView    : "com.android.support:recyclerview-v7:$supportVersion",
             constraintLayout: "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
             supportAppCompat: "com.android.support:appcompat-v7:$appCompatVersion",
-            supportV4       : "com.android.support:support-v4:$supportVersion"
+            supportV4       : "com.android.support:support-v4:$supportVersion",
+            rxAndroid: "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     ]
 
 
@@ -84,6 +85,7 @@ ext {
 
     rxDeps = [
             rxKotlin: "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
+
     ]
 
     daggerDeps = [

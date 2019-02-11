@@ -10,7 +10,7 @@ import ru.testTask.splash.SplashActivity
 interface SplashComponent {
     @Component.Builder
     interface Builder {
-        fun  withDependcies(dependencies: SplashDependencies): Builder
+        fun  withDependencies(dependencies: SplashDependencies): Builder
 
         @BindsInstance
         fun withActivity(activity: SplashActivity): Builder
