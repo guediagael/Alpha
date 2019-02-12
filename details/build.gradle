@@ -39,8 +39,8 @@ dependencies {
     implementation kotlinDeps.values()
 
     implementation daggerDeps.values()
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     kapt daggerKapt.values()
     testImplementation unitTestsDeps.values()
     androidTestImplementation espressoDeps.values()
+    implementation 'com.android.support:design:28.0.0'
 }

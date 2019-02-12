@@ -57,6 +57,7 @@ dependencies {
 
     api roomDeps.values()
     kapt roomKapt.values()
+    implementation 'org.jsoup:jsoup:1.11.3'
 
 
     testImplementation unitTestsDeps.values()

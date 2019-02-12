@@ -1,8 +1,11 @@
 package ru.testTask.data
 
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.jsoup.Connection
+import org.jsoup.Jsoup
 import ru.testTask.core.data.DataManager
 import ru.testTask.core.data.repo.FetchDataRepo
 import ru.testTask.core.data.repo.LoadDataRepo
@@ -57,9 +60,20 @@ class AppRepoImpl @Inject constructor(
         return dataManager.getFeedItems().observeOn(schedulerProvider.ui()).subscribeOn(schedulerProvider.io())
     }
 
-    override fun bookMarkPage(webViewItem: WebViewItem): Completable {
-        return dataManager.bookmarkPage(webViewItem).subscribeOn(schedulerProvider.io())
-            .observeOn(schedulerProvider.ui())
+    override fun bookMarkPage(webViewItemUrl: String): Completable {
+
+        return Completable.fromSingle(getHtml(webViewItemUrl)
+            .doOnSuccess { html ->
+                run {
+                    val webViewItem = WebViewItem(webViewItemUrl, html)
+                    dataManager.bookmarkPage(webViewItem).subscribeOn(schedulerProvider.io())
+                        .observeOn(schedulerProvider.ui()).subscribe()
+                }
+
+
+            }).doOnError { t -> Log.e(TAG, t.message, t) }
+
+
     }
 
     override fun unbookmarkPage(webViewItem: WebViewItem): Completable {
@@ -83,6 +97,16 @@ class AppRepoImpl @Inject constructor(
 
     private fun addItemToTheDb(items: List<FeedItem>): Completable {
         return dataManager.addItemstoTheDb(items)
+    }
+
+
+    private fun getHtml(url: String): Single<String> {
+        val connection = Jsoup.connect(url).method(Connection.Method.GET)
+        return Single.fromCallable {
+            connection.execute()
+        }.subscribeOn(schedulerProvider.io()).observeOn(schedulerProvider.io())
+            .flatMap { t -> Single.fromCallable { t.body() } }.doOnSuccess { t -> Log.d(TAG, t) }
+            .doOnError { t -> Log.e(TAG, t.message, t) }
     }
 
 }

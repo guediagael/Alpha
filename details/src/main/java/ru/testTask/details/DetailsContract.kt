@@ -7,11 +7,13 @@ interface DetailsContract {
         fun webViewItemLoaded(webViewItems: List<WebViewItem>)
         fun onError(errorMessage: String)
         fun onBookmarkStatusChecked(isBookmarked: Boolean)
+        fun pageBookmarked()
     }
 
     interface Presenter{
         fun loadWebViewItems(view: View)
-        fun bookmarkPage(webViewItem: WebViewItem)
+        fun bookmarkPage(url: String)
         fun checkBookmarkStatus(url: String)
+
     }
 }

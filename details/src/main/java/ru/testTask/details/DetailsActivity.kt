@@ -8,8 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
-import android.webkit.MimeTypeMap
+import android.view.View.GONE
 import kotlinx.android.synthetic.main.activity_details.*
+import ru.testTask.common.utils.showShortToast
 import ru.testTask.details.di.DetailsComponent
 import ru.testTask.model.WebViewItem
 import ru.testTask.ui.WebViewMotionDetector
@@ -36,17 +37,22 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View, WebViewMotion
 
     @Inject
     lateinit var presenter: DetailsContract.Presenter
-    private lateinit var links: List<String>
-    private lateinit var pages: List<WebViewItem>
+    private lateinit var mLinks: List<String>
+    private lateinit var mPages: MutableList<WebViewItem>
     private lateinit var mGestureDetectorCompat: GestureDetectorCompat
     private lateinit var mCurrentLink: String
 
     override fun webViewItemLoaded(webViewItems: List<WebViewItem>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mPages.clear()
+        mPages.addAll(webViewItems)
+        showShortToast("Список обновлена")
+        val currentPage = webViewItems.find { item-> item.url == mCurrentLink }
+        webView.loadDataWithBaseURL(currentPage?.url, currentPage?.content, "text/html",null,null)
     }
 
     override fun onError(errorMessage: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        showShortToast(errorMessage)
+
     }
 
     override fun onBookmarkStatusChecked(isBookmarked: Boolean) {
@@ -66,16 +72,16 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View, WebViewMotion
 
         webView.setOnTouchListener { v, event -> onTouchEvent(event)  }
         if (intent.hasExtra(INTENT_KEY_URL_LIST) && intent.hasExtra(INTENT_KEY_FIRST_ELEMENT)) {
-//            TODO("use internet to load ")
             val myIntent = intent.extras
 
             val currentUrl = myIntent?.getString(INTENT_KEY_FIRST_ELEMENT)
 
-            links = myIntent?.getStringArrayList(INTENT_KEY_URL_LIST)!!
+            mLinks = myIntent?.getStringArrayList(INTENT_KEY_URL_LIST)!!
 
-            if (!currentUrl.isNullOrBlank()) initWebViewForOnlineUse(currentUrl)
-        } else {
-            presenter.loadWebViewItems(this)
+            currentUrl?.let { initWebViewForOnlineUse(currentUrl) }
+        } else if (intent.hasExtra(INTENT_KEY_FIRST_ELEMENT)){
+            val currentUrl = intent.extras?.getString(INTENT_KEY_FIRST_ELEMENT)
+            currentUrl?.let { initWebViewForOfflineUse(currentUrl) }
         }
 
     }
@@ -86,42 +92,13 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View, WebViewMotion
         return super.onTouchEvent(event)
     }
 
-    private fun initWebViewForOfflineUse() {
-
-    }
-
-    private fun initWebViewForOnlineUse(currentPage: String) {
-        mCurrentLink = currentPage
-        webView.loadUrl(currentPage)
-
-    }
 
 
-    private fun getNextUrl(): String? {
-        val currentIndex = links.indexOf(mCurrentLink)
-        return if (currentIndex < links.size - 1) links[currentIndex + 1] else null
-    }
 
-    private fun getPrevUrl(): String? {
-        val currentIndex = links.indexOf(mCurrentLink)
-        return if (currentIndex > 0) links[currentIndex - 1] else null
-    }
-
-    private fun getNextHtmlData(): String? {
-        val links = pages.map { it.content }
-        val currentIndex = links.indexOf(mCurrentLink)
-        return if (currentIndex < links.size - 1) links[currentIndex + 1] else null
-    }
-
-    private fun getPrevData(): String? {
-        val links = pages.map { it.content }
-        val currentIndex = links.indexOf(mCurrentLink)
-        return if (currentIndex > 0) links[currentIndex - 1] else null
-    }
 
     override fun swipeLeft() {
         Log.i(TAG,"swiping left")
-        if (links.isNotEmpty()) {
+        if (mLinks.isNotEmpty()) {
             val url = getPrevUrl()
             url?.let {
                 webView.loadUrl(url)
@@ -136,7 +113,7 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View, WebViewMotion
 
     override fun swipeRight() {
         Log.i(TAG,"swiping right")
-        if (links.isNotEmpty()) {
+        if (mLinks.isNotEmpty()) {
             val url = getNextUrl()
             url?.let {
                 webView.loadUrl(url)
@@ -148,6 +125,60 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View, WebViewMotion
             html?.let { webView.loadDataWithBaseURL(mCurrentLink,html, "text/html", null, null) }
         }
     }
+
+    override fun pageBookmarked() {
+        showShortToast("saved")
+    }
+
+    private fun initWebViewForOnlineUse(currentPage: String) {
+        mCurrentLink = currentPage
+//        webView.settings.javaScriptEnabled=true
+//        webView.webViewClient = CustomWebClient(webView)
+        webView.loadUrl(currentPage)
+        imageButton.setOnClickListener { v->
+            run {
+                Log.d(TAG, "pressed")
+                presenter.bookmarkPage(mCurrentLink)
+            }
+        }
+//        floatingActionButton.setOnClickListener(View.OnClickListener { v->{
+//            savePage()
+//        } })
+
+
+
+    }
+
+
+    private fun getNextUrl(): String? {
+        val currentIndex = mLinks.indexOf(mCurrentLink)
+        return if (currentIndex < mLinks.size - 1) mLinks[currentIndex + 1] else null
+    }
+
+    private fun getPrevUrl(): String? {
+        val currentIndex = mLinks.indexOf(mCurrentLink)
+        return if (currentIndex > 0) mLinks[currentIndex - 1] else null
+    }
+
+    private fun getNextHtmlData(): String? {
+        val links = mPages.map { it.content }
+        val currentIndex = links.indexOf(mCurrentLink)
+        return if (currentIndex < links.size - 1) links[currentIndex + 1] else null
+    }
+
+    private fun getPrevData(): String? {
+        val links = mPages.map { it.content }
+        val currentIndex = links.indexOf(mCurrentLink)
+        return if (currentIndex > 0) links[currentIndex - 1] else null
+    }
+
+
+    private fun initWebViewForOfflineUse(currentLink: String) {
+        mCurrentLink = currentLink
+        imageButton.visibility = GONE
+        presenter.loadWebViewItems(this)
+    }
+
 
 }
 

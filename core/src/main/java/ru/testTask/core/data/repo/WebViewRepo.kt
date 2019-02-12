@@ -6,7 +6,7 @@ import ru.testTask.model.WebViewItem
 
 interface WebViewRepo {
 
-    fun bookMarkPage(webViewItem: WebViewItem): Completable
+    fun bookMarkPage(webViewItemUrl: String): Completable
     fun unbookmarkPage(webViewItem: WebViewItem): Completable
     fun loadBookmarkedWebItems(): Flowable<List<WebViewItem>>
 }
