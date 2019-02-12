@@ -1,5 +1,6 @@
 package ru.testTask.data.local.db
 
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -9,7 +10,9 @@ import ru.testTask.model.WebViewItem
 import javax.inject.Inject
 
 class AppDbHelper @Inject constructor(private val dataBase: AppDataBase) : DbHelper {
-
+    companion object {
+        val TAG = AppDbHelper::class.java.simpleName
+    }
 
     override fun getFeedItems(): Flowable<List<FeedItem>> {
         val feedItems = arrayListOf<FeedItem>()
@@ -31,7 +34,7 @@ class AppDbHelper @Inject constructor(private val dataBase: AppDataBase) : DbHel
 
     override fun addItemstoTheDb(feedItem: List<FeedItem>): Completable {
         val newsItems = arrayListOf<NewsItem>()
-
+        Log.i(TAG, newsItems.toString())
         feedItem.map { newsItems.add(NewsItem(it.link, it.title)) }
         return  Completable.fromCallable { dataBase.newsItemDao().insertNewItems(newsItems) }
     }

@@ -1,6 +1,7 @@
 package ru.testTask.alpha.router
 
 import android.content.Context
+import ru.testTask.main.MainActivity
 import javax.inject.Inject
 
 class AppRouterImpl
@@ -15,10 +16,10 @@ class AppRouterImpl
     }
 
     override fun openMain(context: Context) {
-
+        MainActivity.start(context)
     }
 
-    override fun openDetails(context: Context) {
+    override fun openDetails(context: Context, firstElementToShow : String) {
 
     }
 }

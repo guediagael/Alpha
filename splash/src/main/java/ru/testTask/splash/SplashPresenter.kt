@@ -2,29 +2,40 @@ package ru.testTask.splash
 
 import android.content.Context
 import android.util.Log
+import ru.testTask.core.rx.SchedulerProvider
 import ru.testTask.model.FeedItem
-import javax.inject.Inject
 
 
 class SplashPresenter(
     private val splashRouter: SplashRouter,
+    private val schedulerProvider: SchedulerProvider,
     private val splashInteractor: SplashInteractor
-): SplashContract.Presenter {
+) : SplashContract.Presenter {
+
+    companion object {
+
+        val TAG = SplashPresenter::class.java.simpleName
+    }
 
     private lateinit var splashPresenterListener: SplashContract.View
 
-
-    override fun onCreate(splashView: SplashContract.View){
-        Log.i("creating presenter", "creating")
+    override fun onCreate(splashView: SplashContract.View) {
         this.splashPresenterListener = splashView
-        splashInteractor.getFeed()
-            .doOnNext { item: List<FeedItem>? -> run {
-                Log.i("new item: ", item.toString()) }
+        splashInteractor.checkIsFirstConnection()
+            .doOnSuccess { isFirstconnection ->
+                kotlin.run {
+                    Log.d(TAG, "is first connection $isFirstconnection")
+                    if (isFirstconnection) {
 
-            }
-            .doOnError{t: Throwable-> kotlin.run { Log.e("fetch news error",t.message, t) }}
-            .doOnComplete {  }
-            .subscribe()
+                        splashInteractor.getFeed {
+                            splashPresenterListener.onLoaded() }
+//
+                    } else {
+                        splashView.onLoaded()
+                    }
+                }
+            }.subscribe()
+
     }
 
 
@@ -34,10 +45,10 @@ class SplashPresenter(
     }
 
 
-    private fun startRefreshService(){
+    private fun startRefreshService() {
+        //startService if success then set is no more the first connection
 
     }
-
 
 
 }

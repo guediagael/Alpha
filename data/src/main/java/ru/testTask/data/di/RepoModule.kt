@@ -11,6 +11,7 @@ import ru.testTask.core.data.SharedPreferencesHelper
 import ru.testTask.core.data.repo.FetchDataRepo
 import ru.testTask.core.data.repo.LoadDataRepo
 import ru.testTask.core.di.ApplicationScope
+import ru.testTask.core.rx.SchedulerProvider
 import ru.testTask.data.AppDataManager
 import ru.testTask.data.AppRepoImpl
 import ru.testTask.data.BuildConfig
@@ -25,7 +26,10 @@ class RepoModule {
     @Provides
     @ApplicationScope
     fun provideDatabase(application: Context): AppDataBase {
-        val db = Room.databaseBuilder(application, AppDataBase::class.java, BuildConfig.APPLICATION_ID).build()
+        val db = Room
+            .databaseBuilder(application, AppDataBase::class.java, BuildConfig.APPLICATION_ID)
+            .allowMainThreadQueries()
+            .build()
         return db
     }
 
@@ -53,12 +57,12 @@ class RepoModule {
 
     @Provides
     @ApplicationScope
-    fun provideSplashRepo(feedApi: FeedApi, dataManager: DataManager): FetchDataRepo {
-        return AppRepoImpl(feedApi, dataManager)
+    fun provideSplashRepo(feedApi: FeedApi, dataManager: DataManager, schedulerProvider: SchedulerProvider): FetchDataRepo {
+        return AppRepoImpl(feedApi, dataManager, schedulerProvider)
     }
 
 
     @Provides
     @ApplicationScope
-    fun provideMainRepo(feedApi: FeedApi, dataManager: DataManager): LoadDataRepo = AppRepoImpl(feedApi, dataManager)
+    fun provideMainRepo(feedApi: FeedApi, dataManager: DataManager, schedulerProvider: SchedulerProvider): LoadDataRepo = AppRepoImpl(feedApi, dataManager, schedulerProvider)
 }

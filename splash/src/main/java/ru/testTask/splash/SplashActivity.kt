@@ -28,7 +28,6 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
         SplashComponent.create(this).inject(this)
         splashPresenter.onCreate(this)
 

@@ -7,5 +7,6 @@ import ru.testTask.model.FeedItem
 interface FetchDataRepo {
     fun fetchFromApi(): Flowable<List<FeedItem>>
     fun isFirstAppUseUse() : Single<Boolean>
+    fun setIsNotTheFirstUse()
 
 }

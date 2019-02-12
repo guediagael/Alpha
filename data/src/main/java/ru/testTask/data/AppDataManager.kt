@@ -8,12 +8,14 @@ import ru.testTask.core.data.DbHelper
 import ru.testTask.core.data.SharedPreferencesHelper
 import ru.testTask.model.FeedItem
 import ru.testTask.model.WebViewItem
-import javax.inject.Inject
 
-class AppDataManager (
+class AppDataManager(
     private val sharedPreferencesHelper: SharedPreferencesHelper,
     private val dbHelper: DbHelper
 ) : DataManager {
+    override fun setIfNotFirstConnection() {
+        sharedPreferencesHelper.setIfNotFirstConnection()
+    }
 
     override fun isFirstConnection(): Boolean = sharedPreferencesHelper.isFirstConnection()
 
