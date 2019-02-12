@@ -32,20 +32,23 @@ class MainActivity : AppCompatActivity(), MainContract.View{
         setContentView(R.layout.activity_main)
 
         MainComponent.create(this).inject(this)
-        //get an illegalStateException when I use android extension
-//        recyclerView = findViewById(R.id.recyclerViewNewsFeed)
         recyclerViewNewsFeed?.layoutManager = layoutManager
         recyclerViewNewsFeed?.adapter = recyclerViewAdapter
         presenter.onCreate(this)
+        recyclerViewAdapter.setListener { url: String ->
+            presenter.showDetails(this,url, recyclerViewAdapter.getItemUrls())
+        }
 
     }
 
+
+
     override fun feedItemsLoaded(feedItems: List<FeedItem>) {
-        Log.i("feedItmeSize: ", feedItems.size.toString())
         recyclerViewAdapter.addItems(feedItems)
     }
 
     override fun onError(errorMessage: String) {
+
         showShortToast(errorMessage)
     }
 }

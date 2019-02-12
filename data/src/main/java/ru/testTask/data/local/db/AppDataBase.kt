@@ -10,4 +10,6 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun bookmarkedPageDao(): BookmarkedPageDao
 
     abstract fun newsItemDao(): NewsItemDao
+
+
 }

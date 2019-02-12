@@ -12,4 +12,6 @@ interface DbHelper {
     fun bookmarkPage(webViewItem: WebViewItem): Completable
     fun addItemstoTheDb(feedItem: List<FeedItem>): Completable
     fun getBookmark(url: String): Single<WebViewItem>
+    fun removeBookmark(webViewItem: WebViewItem): Completable
+
 }

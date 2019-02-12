@@ -18,14 +18,15 @@ interface MainComponent {
                 .build()
         }
     }
+
     @Component.Builder
-    interface Builder{
-        fun  withDependencies(dependencies: MainDependencies): Builder
+    interface Builder {
+        fun withDependencies(dependencies: MainDependencies): Builder
 
         @BindsInstance
         fun withActivity(activity: MainActivity): Builder
 
-        fun  build(): MainComponent
+        fun build(): MainComponent
     }
 
     fun inject(activity: MainActivity)

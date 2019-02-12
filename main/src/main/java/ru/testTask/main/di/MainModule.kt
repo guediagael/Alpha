@@ -20,7 +20,7 @@ class MainModule {
 
     @Provides
     fun provideLinearLayoutManager(context: Context):LinearLayoutManager{
-        return LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+        return LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
     }
     @Provides
     fun provideMainPresenter(mainInteractor: MainInteractor, mainRouter: MainRouter, schedulerProvider: SchedulerProvider): MainContract.Presenter{

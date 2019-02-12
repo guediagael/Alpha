@@ -50,6 +50,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':main')
     implementation project(':splash')
+    implementation project(':details')
 
     implementation androidDeps.values()
     implementation rxDeps.values()

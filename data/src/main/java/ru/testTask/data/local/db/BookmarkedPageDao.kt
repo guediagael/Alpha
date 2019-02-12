@@ -1,9 +1,6 @@
 package ru.testTask.data.local.db
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 
 @Dao
 interface BookmarkedPageDao {
@@ -15,4 +12,7 @@ interface BookmarkedPageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewBookmark(vararg bookmarkedPages: BookmarkedPage)
+
+    @Query("DELETE FROM BookmarkedPage WHERE link =:link")
+    fun deletePage(link: String): Int
 }

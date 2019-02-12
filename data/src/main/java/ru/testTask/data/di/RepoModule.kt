@@ -10,6 +10,7 @@ import ru.testTask.core.data.DbHelper
 import ru.testTask.core.data.SharedPreferencesHelper
 import ru.testTask.core.data.repo.FetchDataRepo
 import ru.testTask.core.data.repo.LoadDataRepo
+import ru.testTask.core.data.repo.WebViewRepo
 import ru.testTask.core.di.ApplicationScope
 import ru.testTask.core.rx.SchedulerProvider
 import ru.testTask.data.AppDataManager
@@ -34,7 +35,6 @@ class RepoModule {
     }
 
 
-
     @ApplicationScope
     @Provides
     fun provideSharedPreferenceHelper(context: Context): SharedPreferencesHelper {
@@ -48,21 +48,37 @@ class RepoModule {
     fun provideDbHelper(appDataBase: AppDataBase): DbHelper = AppDbHelper(appDataBase)
 
 
-
     @Provides
     @ApplicationScope
-    fun provideDataManager(sharedPreferencesHelper: SharedPreferencesHelper, dbHelper: DbHelper): DataManager{
+    fun provideDataManager(sharedPreferencesHelper: SharedPreferencesHelper, dbHelper: DbHelper): DataManager {
         return AppDataManager(sharedPreferencesHelper, dbHelper)
     }
 
     @Provides
     @ApplicationScope
-    fun provideSplashRepo(feedApi: FeedApi, dataManager: DataManager, schedulerProvider: SchedulerProvider): FetchDataRepo {
+    fun provideSplashRepo(
+        feedApi: FeedApi,
+        dataManager: DataManager,
+        schedulerProvider: SchedulerProvider
+    ): FetchDataRepo {
         return AppRepoImpl(feedApi, dataManager, schedulerProvider)
     }
 
 
     @Provides
     @ApplicationScope
-    fun provideMainRepo(feedApi: FeedApi, dataManager: DataManager, schedulerProvider: SchedulerProvider): LoadDataRepo = AppRepoImpl(feedApi, dataManager, schedulerProvider)
+    fun provideMainRepo(
+        feedApi: FeedApi,
+        dataManager: DataManager,
+        schedulerProvider: SchedulerProvider
+    ): LoadDataRepo = AppRepoImpl(feedApi, dataManager, schedulerProvider)
+
+
+    @Provides
+    @ApplicationScope
+    fun provideWebViewRepo(feedApi: FeedApi,
+                           dataManager: DataManager,
+                           schedulerProvider: SchedulerProvider
+    ): WebViewRepo = AppRepoImpl(feedApi, dataManager, schedulerProvider)
+
 }

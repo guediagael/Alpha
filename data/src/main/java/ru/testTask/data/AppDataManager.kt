@@ -28,4 +28,7 @@ class AppDataManager(
     override fun addItemstoTheDb(feedItem: List<FeedItem>): Completable = dbHelper.addItemstoTheDb(feedItem)
 
     override fun getBookmark(url: String): Single<WebViewItem> = dbHelper.getBookmark(url)
+
+    override fun removeBookmark(webViewItem: WebViewItem): Completable =dbHelper.removeBookmark(webViewItem)
+
 }

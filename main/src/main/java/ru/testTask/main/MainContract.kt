@@ -11,6 +11,6 @@ interface MainContract {
 
     interface Presenter {
         fun onCreate(view: View)
-        fun showDetails(context: Context, firstElementToShowUrl: String)
+        fun showDetails(context: Context, firstElementToShowUrl: String, otherFeedElementUrls: List<String>)
     }
 }

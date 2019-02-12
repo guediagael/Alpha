@@ -11,5 +11,5 @@ interface NewsItemDao {
     fun getNewsFeed(): List<NewsItem>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNewItems( newsItems: List<NewsItem>)
+    fun insertNewItems( vararg newsItems: NewsItem): List<Long>
 }

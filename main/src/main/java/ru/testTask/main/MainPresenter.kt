@@ -16,12 +16,12 @@ class MainPresenter(
     lateinit var view: MainContract.View
     override fun onCreate(view : MainContract.View) {
         this.view = view
-        Log.d("getting items", "...")
+        Log.d(TAG, "getting items")
         mainInteractor.loadItems()
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .subscribe({items-> kotlin.run{
-                Log.d(TAG, items.toString())
+                Log.d("$TAG result in presenter", items.toString())
                 view.feedItemsLoaded(items)
             }}, {t: Throwable? ->  kotlin.run{
                 Log.e(TAG,t?.message, t)
@@ -31,7 +31,7 @@ class MainPresenter(
 
     }
 
-    override fun showDetails(context: Context, firstElementToShowUrl: String) {
-        mainRouter.openDetails(context, firstElementToShowUrl)
+    override fun showDetails(context: Context, firstElementToShowUrl: String, otherFeedElementUrls : List<String> ) {
+        mainRouter.openDetails(context, firstElementToShowUrl,otherFeedElementUrls)
     }
 }
