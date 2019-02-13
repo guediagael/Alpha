@@ -1,6 +1,7 @@
 package ru.testTask.alpha
 
 import android.app.Application
+import ru.testTask.alpha.di.AppComponent
 import ru.testTask.alpha.di.AppModule
 import ru.testTask.alpha.di.DaggerAppComponent
 import ru.testTask.core.interfaces.ComponentDependenciesProvider
@@ -13,6 +14,9 @@ open class NewsFeedShowerApp: Application(), HasComponentDependencies {
     override lateinit var  dependencies: ComponentDependenciesProvider
         protected set
 
+    lateinit var appComponent: AppComponent
+    private set
+
     override fun onCreate() {
         super.onCreate()
         setup()
@@ -24,5 +28,9 @@ open class NewsFeedShowerApp: Application(), HasComponentDependencies {
             .appModule(AppModule(this)).build()
         appComponent.inject(this)
     }
+
+//    fun getAppComponent : AppComponent(){
+//        return
+//    }
 
 }

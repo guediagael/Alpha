@@ -2,6 +2,7 @@ package ru.testTask.splash.di
 
 import dagger.Module
 import dagger.Provides
+import ru.testTask.core.data.repo.FetchDataRepo
 import ru.testTask.core.rx.SchedulerProvider
 import ru.testTask.splash.SplashContract
 import ru.testTask.splash.SplashInteractor
@@ -16,4 +17,11 @@ class SplashModule {
 
          return SplashPresenter(splashRouter,schedulerProvider, splashInteractor)
     }
+
+
+
+
+
+
+
 }

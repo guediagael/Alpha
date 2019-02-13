@@ -1,1 +1,1 @@
-include ':app', ':core', ':data', ':logger', ':testShared', ':model', ':main', ':splash', ':common', ':ui', ':details'
+include ':app', ':core', ':data', ':logger', ':testShared', ':model', ':main', ':splash', ':common', ':ui', ':details', ':downloadservice'

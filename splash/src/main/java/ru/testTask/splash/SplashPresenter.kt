@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.*
 import ru.testTask.core.rx.SchedulerProvider
-import java.time.Duration
+import ru.testTask.downloadservice.DownloadWorker
 import java.util.concurrent.TimeUnit
 
 

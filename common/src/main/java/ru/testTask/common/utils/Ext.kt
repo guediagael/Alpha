@@ -26,6 +26,8 @@ inline fun <reified T : ComponentDependencies> Service.findComponentDependencies
     return findComponentDependenciesProvider()[T::class.java] as T
 }
 
+
+
 fun Fragment.findComponentDependenciesProvider(): ComponentDependenciesProvider {
     val hasDaggerProviders = when {
         activity?.application is HasComponentDependencies -> activity?.application as HasComponentDependencies
@@ -53,6 +55,8 @@ fun Service.findComponentDependenciesProvider(): ComponentDependenciesProvider {
     }
     return hasDaggerProviders.dependencies
 }
+
+
 
 fun Activity.showShortToast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()

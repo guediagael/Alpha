@@ -12,7 +12,9 @@ import javax.inject.Inject
 class AppDbHelper @Inject constructor(private val dataBase: AppDataBase) : DbHelper {
 
 
+
     companion object {
+
         val TAG = AppDbHelper::class.java.simpleName
     }
 

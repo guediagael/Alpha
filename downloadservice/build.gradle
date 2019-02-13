@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
-
 
 android {
     compileSdkVersion 28
@@ -29,20 +27,20 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation project(':core')
     implementation project(':common')
-    implementation project(':ui')
-    implementation project(':downloadservice')
-
+    implementation project(':data')
     implementation androidDeps.values()
 
     implementation kotlinDeps.values()
-
-    implementation daggerDeps.values()
-    kapt daggerKapt.values()
-
     implementation workManagerDeps.values()
+    implementation networkDeps.values()
+
+    implementation rxDeps.values()
+    api roomDeps.values()
+    kapt roomKapt.values()
 
     testImplementation unitTestsDeps.values()
     androidTestImplementation espressoDeps.values()

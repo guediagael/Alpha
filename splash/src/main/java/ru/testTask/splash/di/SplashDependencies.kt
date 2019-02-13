@@ -14,4 +14,5 @@ interface SplashDependencies : ComponentDependencies {
 
     fun provideSchedulerProvider(): SchedulerProvider
 
+
 }

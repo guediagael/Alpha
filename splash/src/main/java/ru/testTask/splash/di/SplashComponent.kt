@@ -17,7 +17,12 @@ interface SplashComponent {
                 .withDependencies(activity.findComponentDependencies())
                 .build()
         }
+
+
+
     }
+
+
 
     @Component.Builder
     interface Builder {
