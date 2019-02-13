@@ -10,7 +10,7 @@ interface MainContract {
     }
 
     interface Presenter {
-        fun onCreate(view: View)
+        fun onCreate(view: View, isOffline : Boolean)
         fun showDetails(context: Context, firstElementToShowUrl: String, otherFeedElementUrls: List<String>)
     }
 }

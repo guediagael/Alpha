@@ -109,4 +109,7 @@ class AppRepoImpl @Inject constructor(
             .doOnError { t -> Log.e(TAG, t.message, t) }
     }
 
+    override fun fetchBookmarkedWebViewItems(): Flowable<List<WebViewItem>> {
+        return loadBookmarkedWebItems()
+    }
 }

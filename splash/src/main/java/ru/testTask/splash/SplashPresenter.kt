@@ -2,8 +2,10 @@ package ru.testTask.splash
 
 import android.content.Context
 import android.util.Log
+import androidx.work.*
 import ru.testTask.core.rx.SchedulerProvider
-import ru.testTask.model.FeedItem
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 
 class SplashPresenter(
@@ -17,10 +19,11 @@ class SplashPresenter(
         val TAG = SplashPresenter::class.java.simpleName
     }
 
-    private lateinit var splashPresenterListener: SplashContract.View
+    private lateinit var mSplashPresenterListener: SplashContract.View
+    private lateinit var mWorkerManager : WorkManager
 
     override fun onCreate(splashView: SplashContract.View) {
-        this.splashPresenterListener = splashView
+        this.mSplashPresenterListener = splashView
         splashInteractor.checkIsFirstConnection()
             .doOnSuccess { isFirstconnection ->
                 kotlin.run {
@@ -28,7 +31,7 @@ class SplashPresenter(
                     if (isFirstconnection) {
 
                         splashInteractor.getFeed {
-                            splashPresenterListener.onLoaded() }
+                            mSplashPresenterListener.onLoaded() }
 //
                     } else {
                         splashView.onLoaded()
@@ -46,7 +49,11 @@ class SplashPresenter(
 
 
     private fun startRefreshService() {
-        //startService if success then set is no more the first connection
+        val taskContraint = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val workRequest  = PeriodicWorkRequestBuilder<DownloadWorker>(5, TimeUnit.MINUTES)
+        workRequest.setConstraints(taskContraint).build()
+        val buildedWorkRequest = workRequest.build()
+        WorkManager.getInstance().enqueue(buildedWorkRequest)
 
     }
 

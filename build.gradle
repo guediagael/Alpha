@@ -74,6 +74,8 @@ ext {
     rxKotlinVersion = '2.3.0'
     rxAndroidVersion = '2.1.0'
 
+    work_version = "1.0.0-beta05"
+
     androidDeps = [
             cardView        : "com.android.support:cardview-v7:$supportVersion",
             recyclerView    : "com.android.support:recyclerview-v7:$supportVersion",
@@ -129,6 +131,11 @@ ext {
             simpleXmlConverter: "com.squareup.retrofit2:converter-simplexml:$retrofitVersion",
             okHttp            : "com.squareup.okhttp3:okhttp:$okhttpVersion",
             logging           : "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    ]
+
+
+    workManagerDeps = [
+            workManager : "android.arch.work:work-runtime-ktx:$work_version"
     ]
 
 

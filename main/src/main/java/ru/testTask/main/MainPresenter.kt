@@ -10,23 +10,36 @@ class MainPresenter(
     private val schedulerProvider: SchedulerProvider,
     private val mainInteractor: MainInteractor
 ) : MainContract.Presenter {
+
     companion object {
         val TAG = MainPresenter::class.java.simpleName
     }
     lateinit var view: MainContract.View
-    override fun onCreate(view : MainContract.View) {
+    override fun onCreate(view : MainContract.View, isOffline: Boolean) {
         this.view = view
         Log.d(TAG, "getting items")
-        mainInteractor.loadItems()
-            .subscribeOn(schedulerProvider.io())
-            .observeOn(schedulerProvider.ui())
-            .subscribe({items-> kotlin.run{
-                Log.d("$TAG result in presenter", items.toString())
-                view.feedItemsLoaded(items)
-            }}, {t: Throwable? ->  kotlin.run{
-                Log.e(TAG,t?.message, t)
-                view.onError("Ощибка")
-            } })
+        if (!isOffline){
+            mainInteractor.loadItems()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .subscribe({items-> kotlin.run{
+                    Log.d("$TAG result in presenter", items.toString())
+                    view.feedItemsLoaded(items)
+                }}, {t: Throwable? ->  kotlin.run{
+                    Log.e(TAG,t?.message, t)
+                    view.onError("Ощибка")
+                } })
+        }else{
+            mainInteractor.loadBookMarkedItems().subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .subscribe({items-> kotlin.run{
+                    Log.d("$TAG result in presenter", items.toString())
+                    view.feedItemsLoaded(items.map { item-> FeedItem(item.url, item.url) })
+                }}, {t: Throwable? ->  kotlin.run{
+                    Log.e(TAG,t?.message, t)
+                    view.onError("Ощибка")
+                } })
+        }
 
 
     }

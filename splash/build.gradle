@@ -41,6 +41,8 @@ dependencies {
     implementation daggerDeps.values()
     kapt daggerKapt.values()
 
+    implementation workManagerDeps.values()
+
     testImplementation unitTestsDeps.values()
     androidTestImplementation espressoDeps.values()
 }

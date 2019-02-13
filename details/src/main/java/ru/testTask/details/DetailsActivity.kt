@@ -1,5 +1,6 @@
 package ru.testTask.details
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.view.View.GONE
 import kotlinx.android.synthetic.main.activity_details.*
 import ru.testTask.common.utils.showShortToast
@@ -27,7 +29,8 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View, WebViewMotion
             if (urlList?.size?.compareTo(0) != 0 && firstElementUrl?.length?.compareTo(0) != 0) {
                 intent.putStringArrayListExtra(INTENT_KEY_URL_LIST, urlList)
                 intent.putExtra(INTENT_KEY_FIRST_ELEMENT, firstElementUrl)
-            }
+            }else if (firstElementUrl?.length?.compareTo(0) !=0)
+                intent.putExtra(INTENT_KEY_FIRST_ELEMENT,firstElementUrl)
             context.startActivity(intent)
 
         }
@@ -175,7 +178,7 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View, WebViewMotion
 
     private fun initWebViewForOfflineUse(currentLink: String) {
         mCurrentLink = currentLink
-        imageButton.visibility = GONE
+        imageButton.visibility = View.INVISIBLE
         presenter.loadWebViewItems(this)
     }
 
